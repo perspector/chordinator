@@ -14,7 +14,7 @@ serial = spi(device=0, port=0)
 
 # substitute ssd1331(...) or sh1106(...) below if using that device
 #device = ssd1306(serial)
-device = ssd1309(serial, width=128, height=64, rotate=2)
+device = ssd1309(serial, width=128, height=64, rotate=0)
 
 device.contrast(1) # 0 - 255
 

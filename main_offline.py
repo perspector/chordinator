@@ -22,8 +22,8 @@ Programmed in March-May 2024 (original March 24, 2024)
 
 import sys
 
-song_name = sys.argv[1]
-song_speed = 1 / float(sys.argv[2]) * 0.2
+#song_name = sys.argv[1]
+song_speed = 1 / float(sys.argv[1]) * 0.2
 
 # modules for music analysis/MIDI files
 import pychord
@@ -173,7 +173,8 @@ def main():
         #    txt_data = [x.replace('\n', '') for x in chord_chart.readlines()]
         #    chord_names = txt_data[::5]
         #    for chord in chord_names:
-        for chord in scraper.get_chords(song_name):
+        for chord in open("downloaded_song.txt", "r").readlines():
+            chord = chord.replace("\n", "")
             #time.sleep(0.2) # TODO: Add an option for the user to adjust speed of song
             time.sleep(song_speed)
             if chord != '\xa0' and chord != ' ':
@@ -253,7 +254,9 @@ def main():
         print("Exitted by user...")
         fret_display.fill(BLACK)
         fret_display.show()
+        exit()
 
 
 if __name__ == "__main__":
-    main()
+    while True:
+        main()

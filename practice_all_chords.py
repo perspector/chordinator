@@ -5,31 +5,21 @@ Description:
 A program for use with the "Chordinator", a device to help people learn guitar.
 
 How it works:
-Songs are taken as input (using a search string provided by the user and scraping freetar.de (frontend for https://ultimate-guitar.com))
+Songs are taken as input (using ChordU JSON data or MIDI files???)
 Then, each chord diagram with appropriate colors corresponding to fingers is displayed
 on a display comprised of multiple neopixel strips next to the guitar neck.
 Additionally, the chord name is displayed on an OLED display above the diagram.
 
 Author: Benjamin Chase
-Programmed in March-May 2024 (original March 24, 2024)
+Programmed in March-April 2024 (original March 24, 2024)
 """
-
-# sys is used for script CLI arguments
-# to use: sudo python3 main.py "<songName>" <speed>
-# where:
-# <songName> is the name of your song (string)
-# <speed> is the speed of playing (integer)
-
-import sys
-
-song_name = sys.argv[1]
-song_speed = 1 / float(sys.argv[2]) * 0.2
 
 # modules for music analysis/MIDI files
 import pychord
 import mido
 #import music21
 #import musicpy
+
 
 
 # OLED display, custom module, based upon luma.oled
@@ -44,11 +34,6 @@ from gpiozero import Button
 # See https://learn.adafruit.com/neopixels-on-raspberry-pi
 import board
 import neopixel
-
-
-# for getting chord data, self-built web scraper,
-# thanks https://freetar.de for a nice Ultimate Guitar wrapper
-import scraper
 
 
 fret_display_pin = board.D12
@@ -164,19 +149,15 @@ for chord in song:
 """
 
 def main():
-    """ main function for most code """
     try:
-        #song_name = "Ode to Joy"
-
+        """ main function for most code """
         # chord = "C sharp major"
-        #with open('chord_chart.txt') as chord_chart:
-        #    txt_data = [x.replace('\n', '') for x in chord_chart.readlines()]
-        #    chord_names = txt_data[::5]
-        #    for chord in chord_names:
-        for chord in scraper.get_chords(song_name):
-            #time.sleep(0.2) # TODO: Add an option for the user to adjust speed of song
-            time.sleep(song_speed)
-            if chord != '\xa0' and chord != ' ':
+        with open('chord_chart.txt') as chord_chart:
+            txt_data = [x.replace('\n', '') for x in chord_chart.readlines()]
+            chord_names = txt_data[::5]
+            for chord in chord_names:
+                #time.sleep(1)
+                input("Press ENTER to continue ")
                 Display.write(chord)
                 print("\n\n\n" + chord)
                 # clear display between chords, but don't show it yet
@@ -250,7 +231,8 @@ def main():
         fret_display.fill(BLACK)
         fret_display.show()
     except KeyboardInterrupt:
-        print("Exitted by user...")
+        print("\n\nStopped by user...\n\n")
+        time.sleep(1)
         fret_display.fill(BLACK)
         fret_display.show()
 
